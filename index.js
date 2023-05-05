@@ -1,7 +1,14 @@
-export dates from './dates.js'
-export funcs from './funcs.js'
-export highdict from './highdict.js'
-export validates from './validates.js'
+import dates from './dates.js'
+import funcs from './funcs.js'
+import highdict from './highdict.js'
+import validates from './validates.js'
+
+export {
+  dates,
+  funcs,
+  highdict,
+  validates
+}
 
 export default {
   dates,
