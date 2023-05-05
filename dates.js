@@ -43,14 +43,14 @@ export const format = (date, text, time = true) => {
   return text
 }
 
-export const parse = (text, text = 'YYYY-MM-DD HH:mm:ss') => {
+export const parse = (str, text = 'YYYY-MM-DD HH:mm:ss') => {
   const items = 'YYYY,MM,DD,HH,mm,ss'.split(',')
   let dateText = 'YYYY-MM-DD HH:mm:ss'
   for (let key of items) {
     const left = text.indexOf(key)
     if (left >= 0) {
       const right = left + key.length
-      dateText = dateText.replace(key, text.slice(left, right))
+      dateText = dateText.replace(key, str.slice(left, right))
     } else {
       dateText = dateText.replace(key, '00')
     }
