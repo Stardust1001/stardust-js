@@ -2,17 +2,20 @@ import dates from './dates.js'
 import funcs from './funcs.js'
 import highdict from './highdict.js'
 import validates from './validates.js'
+import websocket from './websocket.js'
 
 export {
   dates,
   funcs,
   highdict,
-  validates
+  validates,
+  websocket
 }
 
 export default {
   dates,
   funcs,
   highdict,
-  validates
+  validates,
+  websocket
 }

@@ -1,6 +1,6 @@
 {
   "name": "@stardust-js/js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Everything I want to publish here",
   "type": "module",
   "main": "index.js",
@@ -26,5 +26,8 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
+  },
+  "dependencies": {
+    "pako": "^2.1.0"
   }
 }
