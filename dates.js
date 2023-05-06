@@ -1,9 +1,60 @@
 
+export class $Date extends Date {
+  static parse (text, fmat) {
+    return new $Date(parse(text, fmat))
+  }
+
+  add (number, unit) {
+    const ms = ({
+      week: 864e5 * 7,
+      day: 864e5,
+      hour: 36e5,
+      minute: 6e4,
+      second: 1e3
+    })
+    if (unit in ms) {
+      return new $Date(this.getTime() + number * ms[unit])
+    }
+    let [year, month, day, hour, minute, second] = format(this, 'YYYY:MM:DD:HH:mm:ss').split(':').map(Number)
+    switch (unit) {
+      case 'year': { year ++; break }
+      case 'month': { month += number; break }
+    }
+    return new $Date(year, month - 1, day, hour, minute, second)
+  }
+
+  minus (number, unit) {
+    return this.add(-number, unit)
+  }
+
+  diff (date) {
+    return this.getTime() - new Date(date).getTime()
+  }
+
+  to (fmat, time = true) {
+    return format(this, fmat, time)
+  }
+
+  toDateTime () {
+    return format(this, '', true)
+  }
+
+  toDate () {
+    return format(this, '', false)
+  }
+
+  toTime () {
+    return format(this, 'HH:mm:ss')
+  }
+}
+
+export const now = () => new $Date()
+
 const _double = (number) => {
   return number >= 10 ? number : ('0' + number)
 }
 
-const replacers = {
+const _replacers = {
   YYYY (date) {
     return date.getFullYear()
   },
@@ -24,9 +75,9 @@ const replacers = {
   }
 }
 
-export const format = (date, text, time = true) => {
-  if (!text) {
-    text = time ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+export const format = (date, fmat, time = true) => {
+  if (!fmat) {
+    fmat = time ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
   }
   if (typeof date === 'string' && date.indexOf('T') < 0) {
     date = date.replace(/-/g, '/')
@@ -35,22 +86,22 @@ export const format = (date, text, time = true) => {
   if (isNaN(date)) {
     return ''
   }
-  Object.keys(replacers).forEach(name => {
-    if (text.indexOf(name) >= 0) {
-      text = text.replace(name, replacers[name](date))
+  Object.keys(_replacers).forEach(name => {
+    if (fmat.indexOf(name) >= 0) {
+      fmat = fmat.replace(name, _replacers[name](date))
     }
   })
-  return text
+  return fmat
 }
 
-export const parse = (str, text = 'YYYY-MM-DD HH:mm:ss') => {
+export const parse = (text, fmat = 'YYYY-MM-DD HH:mm:ss') => {
   const items = 'YYYY,MM,DD,HH,mm,ss'.split(',')
   let dateText = 'YYYY-MM-DD HH:mm:ss'
   for (let key of items) {
-    const left = text.indexOf(key)
+    const left = fmat.indexOf(key)
     if (left >= 0) {
       const right = left + key.length
-      dateText = dateText.replace(key, str.slice(left, right))
+      dateText = dateText.replace(key, text.slice(left, right))
     } else {
       dateText = dateText.replace(key, '00')
     }
@@ -63,6 +114,8 @@ export const convertIsoDates = (text) => {
 }
 
 export default {
+  $Date,
+  now,
   format,
   parse,
   convertIsoDates
