@@ -1,10 +1,11 @@
 {
   "name": "@stardust-js/js",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Everything I want to publish here",
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "build": "esbuild index.js --bundle --outfile=dist/index.js --global-name=StardustJs",
     "push": "git add . && git commit -m \"add\" && git push origin master",
     "pull": "git status && git pull",
     "cloc": "cloc . --exclude-dir=node_modules"
