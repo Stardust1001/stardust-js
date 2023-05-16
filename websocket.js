@@ -1,15 +1,14 @@
-import pako from 'pako'
 
-export const gzip = data => {
+export const gzip = (pako, data) => {
   return pako.gzip(JSON.stringify(data), { to: 'string' })
 }
 
-export const ungzip = data => {
+export const ungzip = (pako, data) => {
   return JSON.parse(pako.ungzip(new Uint8Array(data), { to: 'string' }))
 }
 
-const split = (data, maxBytes = 1e6) => {
-  const gzipped = gzip(data)
+const split = (pako, data, maxBytes = 1e6) => {
+  const gzipped = gzip(pako, data)
   if (gzipped.length < maxBytes) {
     return [gzipped]
   } else {
@@ -30,7 +29,7 @@ const slices = {}
 
 const isBrowser = () => !!globalThis.document
 
-const merge = data => {
+const merge = (pako, data) => {
   slices[data.id] = slices[data.id] || []
   slices[data.id].push(data)
   if (slices[data.id].length === data.total) {
@@ -45,20 +44,20 @@ const merge = data => {
       index += isBrowser() ? p.data.byteLength : p.data.length
     })
     delete slices[data.id]
-    return ungzip(all)
+    return ungzip(pako, all)
   }
 }
 
-export const gzipClient = client => {
+export const gzipClient = (pako, client) => {
   const on = client.on
   client.on = (command, func) => {
     on.apply(client, [command, async data => {
       if (['disconnect'].includes(command)) {
         func(data)
       } else if (data instanceof Buffer) {
-        func(ungzip(data))
+        func(ungzip(pako, data))
       } else {
-        const merged = merge(data)
+        const merged = merge(pako, data)
         merged && func(merged)
       }
     }])
@@ -66,7 +65,7 @@ export const gzipClient = client => {
 
   const emit = client.emit
   client.emit = (command, message) => {
-    const slices = split(message)
+    const slices = split(pako, message)
     slices.forEach(slice => {
       emit.apply(client, [command, slice])
     })

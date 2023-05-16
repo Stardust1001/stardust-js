@@ -13,6 +13,7 @@ export {
 }
 
 export default {
+  version: '1.0.7',
   dates,
   funcs,
   highdict,
