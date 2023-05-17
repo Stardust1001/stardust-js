@@ -7,7 +7,7 @@ export const ungzip = (pako, data) => {
   return JSON.parse(pako.ungzip(new Uint8Array(data), { to: 'string' }))
 }
 
-const split = (pako, data, maxBytes = 1e6) => {
+const split = (pako, data, maxBytes) => {
   const gzipped = gzip(pako, data)
   if (gzipped.length < maxBytes) {
     return [gzipped]
@@ -48,7 +48,11 @@ const merge = (pako, data) => {
   }
 }
 
-export const gzipClient = (pako, client) => {
+export const gzipClient = (pako, client, options) => {
+  options = {
+    maxBytes: 1e6,
+    ...options
+  }
   const on = client.on
   client.on = (command, func) => {
     on.apply(client, [command, async data => {
@@ -65,7 +69,7 @@ export const gzipClient = (pako, client) => {
 
   const emit = client.emit
   client.emit = (command, message) => {
-    const slices = split(pako, message)
+    const slices = split(pako, message, maxBytes)
     slices.forEach(slice => {
       emit.apply(client, [command, slice])
     })
