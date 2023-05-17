@@ -54,9 +54,10 @@ export const gzipClient = (pako, client, options) => {
     ...options
   }
   const on = client.on
+  const Buffer = isBrowser() ? globalThis.ArrayBuffer : globalThis.Buffer
   client.on = (command, func) => {
     on.apply(client, [command, async data => {
-      if (['disconnect'].includes(command)) {
+      if (['connect', 'disconnect'].includes(command)) {
         func(data)
       } else if (data instanceof Buffer) {
         func(ungzip(pako, data))
