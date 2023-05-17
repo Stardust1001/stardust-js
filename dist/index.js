@@ -254,19 +254,19 @@ var StardustJs = (() => {
   var ungzip = (pako, data) => {
     return JSON.parse(pako.ungzip(new Uint8Array(data), { to: "string" }));
   };
-  var split2 = (pako, data, maxBytes = 1e6) => {
+  var split2 = (pako, data, maxBytes2) => {
     const gzipped = gzip(pako, data);
-    if (gzipped.length < maxBytes) {
+    if (gzipped.length < maxBytes2) {
       return [gzipped];
     } else {
-      const total = Math.ceil(gzipped.length / maxBytes);
+      const total = Math.ceil(gzipped.length / maxBytes2);
       const id = Date.now().toString(16);
       return Array.from({ length: total }).map((_, i) => {
         return {
           id,
           total,
           no: i + 1,
-          data: gzipped.slice(i * maxBytes, (i + 1) * maxBytes)
+          data: gzipped.slice(i * maxBytes2, (i + 1) * maxBytes2)
         };
       });
     }
@@ -291,13 +291,18 @@ var StardustJs = (() => {
       return ungzip(pako, all);
     }
   };
-  var gzipClient = (pako, client) => {
+  var gzipClient = (pako, client, options) => {
+    options = {
+      maxBytes: 1e6,
+      ...options
+    };
     const on = client.on;
+    const Buffer2 = isBrowser() ? globalThis.ArrayBuffer : globalThis.Buffer;
     client.on = (command, func) => {
       on.apply(client, [command, async (data) => {
-        if (["disconnect"].includes(command)) {
+        if (["connect", "disconnect"].includes(command)) {
           func(data);
-        } else if (data instanceof Buffer) {
+        } else if (data instanceof Buffer2) {
           func(ungzip(pako, data));
         } else {
           const merged = merge(pako, data);
@@ -307,7 +312,7 @@ var StardustJs = (() => {
     };
     const emit = client.emit;
     client.emit = (command, message) => {
-      const slices2 = split2(pako, message);
+      const slices2 = split2(pako, message, maxBytes);
       slices2.forEach((slice) => {
         emit.apply(client, [command, slice]);
       });
@@ -322,7 +327,7 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.7",
+    version: "1.0.9",
     dates: dates_default,
     funcs: funcs_default,
     highdict: highdict_default,
