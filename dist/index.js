@@ -254,19 +254,19 @@ var StardustJs = (() => {
   var ungzip = (pako, data) => {
     return JSON.parse(pako.ungzip(new Uint8Array(data), { to: "string" }));
   };
-  var split2 = (pako, data, maxBytes2) => {
+  var split2 = (pako, data, maxBytes) => {
     const gzipped = gzip(pako, data);
-    if (gzipped.length < maxBytes2) {
+    if (gzipped.length < maxBytes) {
       return [gzipped];
     } else {
-      const total = Math.ceil(gzipped.length / maxBytes2);
+      const total = Math.ceil(gzipped.length / maxBytes);
       const id = Date.now().toString(16);
       return Array.from({ length: total }).map((_, i) => {
         return {
           id,
           total,
           no: i + 1,
-          data: gzipped.slice(i * maxBytes2, (i + 1) * maxBytes2)
+          data: gzipped.slice(i * maxBytes, (i + 1) * maxBytes)
         };
       });
     }
@@ -312,7 +312,7 @@ var StardustJs = (() => {
     };
     const emit = client.emit;
     client.emit = (command, message) => {
-      const slices2 = split2(pako, message, maxBytes);
+      const slices2 = split2(pako, message, options.maxBytes);
       slices2.forEach((slice) => {
         emit.apply(client, [command, slice]);
       });
@@ -327,7 +327,7 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.9",
+    version: "1.0.10",
     dates: dates_default,
     funcs: funcs_default,
     highdict: highdict_default,

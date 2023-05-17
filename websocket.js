@@ -70,7 +70,7 @@ export const gzipClient = (pako, client, options) => {
 
   const emit = client.emit
   client.emit = (command, message) => {
-    const slices = split(pako, message, maxBytes)
+    const slices = split(pako, message, options.maxBytes)
     slices.forEach(slice => {
       emit.apply(client, [command, slice])
     })
