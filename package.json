@@ -7,7 +7,7 @@
   "scripts": {
     "build": "esbuild index.js --bundle --outfile=dist/index.js --global-name=StardustJs",
     "push": "git add . && git commit -m \"add\" && git push origin master",
-    "pull": "git status && git pull",
+    "pull": "git status && git pull origin master",
     "cloc": "cloc . --exclude-dir=node_modules"
   },
   "repository": {
