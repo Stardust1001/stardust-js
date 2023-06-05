@@ -39,12 +39,13 @@ var StardustJs = (() => {
         day: 864e5,
         hour: 36e5,
         minute: 6e4,
-        second: 1e3
+        second: 1e3,
+        millisecond: 1
       };
       if (unit in ms) {
         return new $Date(this.getTime() + number * ms[unit]);
       }
-      let [year, month, day, hour, minute, second] = format(this, "YYYY:MM:DD:HH:mm:ss").split(":").map(Number);
+      let [year, month, day, hour, minute, second, millisecond] = format(this, "YYYY:MM:DD:HH:mm:ss:SSS").split(":").map(Number);
       switch (unit) {
         case "year": {
           year++;
@@ -55,7 +56,7 @@ var StardustJs = (() => {
           break;
         }
       }
-      return new $Date(year, month - 1, day, hour, minute, second);
+      return new $Date(year, month - 1, day, hour, minute, second, millisecond);
     }
     minus(number, unit) {
       return this.add(-number, unit);
@@ -98,6 +99,9 @@ var StardustJs = (() => {
     },
     ss(date) {
       return _double(date.getSeconds());
+    },
+    SSS(date) {
+      return ("000" + date.getMilliseconds()).slice(-3);
     }
   };
   var format = (date, fmat, time = true) => {
@@ -327,7 +331,7 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.10",
+    version: "1.0.11",
     dates: dates_default,
     funcs: funcs_default,
     highdict: highdict_default,

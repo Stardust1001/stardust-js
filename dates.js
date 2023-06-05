@@ -10,17 +10,18 @@ export class $Date extends Date {
       day: 864e5,
       hour: 36e5,
       minute: 6e4,
-      second: 1e3
+      second: 1e3,
+      millisecond: 1
     })
     if (unit in ms) {
       return new $Date(this.getTime() + number * ms[unit])
     }
-    let [year, month, day, hour, minute, second] = format(this, 'YYYY:MM:DD:HH:mm:ss').split(':').map(Number)
+    let [year, month, day, hour, minute, second, millisecond] = format(this, 'YYYY:MM:DD:HH:mm:ss:SSS').split(':').map(Number)
     switch (unit) {
       case 'year': { year ++; break }
       case 'month': { month += number; break }
     }
-    return new $Date(year, month - 1, day, hour, minute, second)
+    return new $Date(year, month - 1, day, hour, minute, second, millisecond)
   }
 
   minus (number, unit) {
@@ -72,6 +73,9 @@ const _replacers = {
   },
   ss (date) {
     return _double(date.getSeconds())
+  },
+  SSS (date) {
+    return ('000' + date.getMilliseconds()).slice(-3)
   }
 }
 
