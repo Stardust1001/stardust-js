@@ -317,9 +317,26 @@ var StardustJs = (() => {
     });
     return cn;
   };
+  var encodeQuery = (data) => {
+    const arr = Array.isArray(data) ? data : Object.entries(data);
+    const query = new URLSearchParams();
+    arr.forEach(([k, v]) => {
+      query.append(k, v);
+    });
+    return query.toString();
+  };
+  var decodeQuery = (search) => {
+    if (search.startsWith("http")) {
+      search = new URL(search).search;
+    }
+    const query = new URLSearchParams(search);
+    return [...query].reduce((dict, [k, v]) => ({ ...dict, [k]: v }), {});
+  };
   var funcs_default = {
     sleep,
-    deepCopy
+    deepCopy,
+    encodeQuery,
+    decodeQuery
   };
 
   // highdict.js
@@ -489,7 +506,7 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.13",
+    version: "1.0.14",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,

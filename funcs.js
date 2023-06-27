@@ -16,7 +16,26 @@ export const deepCopy = (obj) => {
   return cn
 }
 
+export const encodeQuery = data => {
+  const arr = Array.isArray(data) ? data : Object.entries(data)
+  const query = new URLSearchParams()
+  arr.forEach(([k, v]) => {
+    query.append(k, v)
+  })
+  return query.toString()
+}
+
+export const decodeQuery = search => {
+  if (search.startsWith('http')) {
+    search = new URL(search).search
+  }
+  const query = new URLSearchParams(search)
+  return [...query].reduce((dict, [k, v]) => ({ ...dict, [k]: v }), {})
+}
+
 export default {
   sleep,
-  deepCopy
+  deepCopy,
+  encodeQuery,
+  decodeQuery
 }
