@@ -20,7 +20,7 @@ export const encodeQuery = data => {
   const arr = Array.isArray(data) ? data : Object.entries(data)
   const query = new URLSearchParams()
   arr.forEach(([k, v]) => {
-    query.append(k, v)
+    query.append(k, v || '')
   })
   return query.toString()
 }
