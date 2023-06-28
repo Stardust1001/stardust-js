@@ -321,7 +321,7 @@ var StardustJs = (() => {
     const arr = Array.isArray(data) ? data : Object.entries(data);
     const query = new URLSearchParams();
     arr.forEach(([k, v]) => {
-      query.append(k, v || "");
+      query.append(k, v == null ? "" : v);
     });
     return query.toString();
   };
@@ -506,7 +506,7 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.15",
+    version: "1.0.16",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
