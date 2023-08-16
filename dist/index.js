@@ -25,6 +25,7 @@ var StardustJs = (() => {
     eventemitter: () => eventemitter_default,
     funcs: () => funcs_default,
     highdict: () => highdict_default,
+    promises: () => promises_default,
     validates: () => validates_default,
     websocket: () => websocket_default
   });
@@ -403,6 +404,50 @@ var StardustJs = (() => {
     mapField
   };
 
+  // promises.js
+  var schedule = async (psGen, total = 0, limit = 20) => {
+    let doing = 0;
+    let current = 0;
+    const results = {};
+    return new Promise((resolve) => {
+      const isDone = () => {
+        let ok = false;
+        if (typeof total === "number") {
+          ok = current >= total - 1;
+        } else if (typeof total === "function") {
+          ok = total(current);
+        } else {
+          throw "unknown type of total";
+        }
+        if (ok && !doing) {
+          resolve(Object.values(results));
+        }
+        return ok;
+      };
+      const fork = () => {
+        const ps = psGen(current);
+        const id = current;
+        ++doing;
+        ps.then((result) => {
+          results[id] = result;
+          doing--;
+          if (!isDone()) {
+            ++current;
+            fork();
+          }
+        });
+      };
+      for (let i = 0; i < limit; i++) {
+        current = i;
+        if (!isDone())
+          fork();
+      }
+    });
+  };
+  var promises_default = {
+    schedule
+  };
+
   // validates.js
   var phone = (text) => {
     return /^1\d{10}$/.test(text);
@@ -506,11 +551,12 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.16",
+    version: "1.0.17",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
     highdict: highdict_default,
+    promises: promises_default,
     validates: validates_default,
     websocket: websocket_default
   };
