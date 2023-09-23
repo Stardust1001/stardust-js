@@ -1,9 +1,11 @@
 
 export const gzip = (pako, data) => {
+  if (typeof data === 'string' && data.startsWith('[compressed]')) return data
   return pako.gzip(JSON.stringify(data), { to: 'string' })
 }
 
 export const ungzip = (pako, data) => {
+  if (typeof data === 'string' && data.startsWith('[compressed]')) return data
   return JSON.parse(pako.ungzip(new Uint8Array(data), { to: 'string' }))
 }
 
@@ -58,6 +60,8 @@ export const gzipClient = (pako, client, options) => {
   client.on = (command, func) => {
     on.apply(client, [command, async data => {
       if (['connect', 'disconnect'].includes(command)) {
+        func(data)
+      } else if (typeof data === 'string' && data.startsWith('[compressed]')) {
         func(data)
       } else if (data instanceof Buffer) {
         func(ungzip(pako, data))

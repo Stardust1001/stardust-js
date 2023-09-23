@@ -473,9 +473,13 @@ var StardustJs = (() => {
 
   // websocket.js
   var gzip = (pako, data) => {
+    if (typeof data === "string" && data.startsWith("[compressed]"))
+      return data;
     return pako.gzip(JSON.stringify(data), { to: "string" });
   };
   var ungzip = (pako, data) => {
+    if (typeof data === "string" && data.startsWith("[compressed]"))
+      return data;
     return JSON.parse(pako.ungzip(new Uint8Array(data), { to: "string" }));
   };
   var split2 = (pako, data, maxBytes) => {
@@ -526,6 +530,8 @@ var StardustJs = (() => {
       on.apply(client, [command, async (data) => {
         if (["connect", "disconnect"].includes(command)) {
           func(data);
+        } else if (typeof data === "string" && data.startsWith("[compressed]")) {
+          func(data);
         } else if (data instanceof Buffer2) {
           func(ungzip(pako, data));
         } else {
@@ -551,7 +557,7 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.17",
+    version: "1.0.18",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
