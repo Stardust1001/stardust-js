@@ -29,21 +29,23 @@ const split = (pako, data, maxBytes) => {
 
 const slices = {}
 
-const isBrowser = () => !!globalThis.document
+const isBrowser = () => !!globalThis.window
 
 const merge = (pako, data) => {
   slices[data.id] = slices[data.id] || []
   slices[data.id].push(data)
   if (slices[data.id].length === data.total) {
+    const isText = typeof data.data === 'string'
     const numBytes = slices[data.id].reduce((sum, p) => {
-      return sum + (isBrowser() ? p.data.byteLength : p.data.length)
+      return sum + (p.data.byteLength || p.data.length)
     }, 0)
-    const all = new Uint8Array(numBytes)
+    let all = isText ? '' : new Uint8Array(numBytes)
     let index = 0
     slices[data.id].forEach(p => {
+      if (isText) return all += p.data
       const array = isBrowser() ? new Uint8Array(p.data) : p.data
       all.set(array, index)
-      index += isBrowser() ? p.data.byteLength : p.data.length
+      index += p.data.byteLength || p.data.length
     })
     delete slices[data.id]
     return ungzip(pako, all)

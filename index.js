@@ -17,7 +17,7 @@ export {
 }
 
 export default {
-  version: '1.0.18',
+  version: '1.0.19',
   dates,
   eventemitter,
   funcs,
