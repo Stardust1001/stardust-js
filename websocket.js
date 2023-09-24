@@ -1,12 +1,15 @@
 
 export const gzip = (pako, data) => {
   if (typeof data === 'string' && data.startsWith('[compressed]')) return data
-  return pako.gzip(JSON.stringify(data), { to: 'string' })
+  return pako.gzip(JSON.stringify(data))
 }
 
 export const ungzip = (pako, data) => {
   if (typeof data === 'string' && data.startsWith('[compressed]')) return data
-  return JSON.parse(pako.ungzip(new Uint8Array(data), { to: 'string' }))
+  if (!(data instanceof ArrayBuffer)) {
+    data = new Uint8Array(data)
+  }
+  return JSON.parse(pako.ungzip(data, { to: 'string' }))
 }
 
 const split = (pako, data, maxBytes) => {

@@ -475,12 +475,15 @@ var StardustJs = (() => {
   var gzip = (pako, data) => {
     if (typeof data === "string" && data.startsWith("[compressed]"))
       return data;
-    return pako.gzip(JSON.stringify(data), { to: "string" });
+    return pako.gzip(JSON.stringify(data));
   };
   var ungzip = (pako, data) => {
     if (typeof data === "string" && data.startsWith("[compressed]"))
       return data;
-    return JSON.parse(pako.ungzip(new Uint8Array(data), { to: "string" }));
+    if (!(data instanceof ArrayBuffer)) {
+      data = new Uint8Array(data);
+    }
+    return JSON.parse(pako.ungzip(data, { to: "string" }));
   };
   var split2 = (pako, data, maxBytes) => {
     const gzipped = gzip(pako, data);
@@ -560,7 +563,7 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.19",
+    version: "1.0.20",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
