@@ -406,6 +406,8 @@ var StardustJs = (() => {
 
   // promises.js
   var schedule = async (psGen, total = 0, limit = 20) => {
+    if (!total)
+      return [];
     let doing = 0;
     let current = 0;
     const results = {};
@@ -439,8 +441,9 @@ var StardustJs = (() => {
       };
       for (let i = 0; i < limit; i++) {
         current = i;
-        if (!isDone())
-          fork();
+        fork();
+        if (isDone())
+          break;
       }
     });
   };
@@ -563,7 +566,7 @@ var StardustJs = (() => {
 
   // index.js
   var stardust_js_default = {
-    version: "1.0.20",
+    version: "1.0.21",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
