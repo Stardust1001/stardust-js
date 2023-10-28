@@ -26,6 +26,7 @@ var StardustJs = (() => {
     funcs: () => funcs_default,
     highdict: () => highdict_default,
     promises: () => promises_default,
+    sleep: () => sleep2,
     validates: () => validates_default,
     websocket: () => websocket_default
   });
@@ -565,11 +566,13 @@ var StardustJs = (() => {
   };
 
   // index.js
+  var { sleep: sleep2 } = funcs_default;
   var stardust_js_default = {
-    version: "1.0.21",
+    version: "1.0.22",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
+    sleep: sleep2,
     highdict: highdict_default,
     promises: promises_default,
     validates: validates_default,
