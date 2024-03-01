@@ -98,6 +98,9 @@ export const format = (date, fmat, time = true) => {
   return fmat
 }
 
+export const formatDate = (date, fmat = 'YYYY-MM-DD') => format(date, fmat)
+export const formatTime = (date, fmat = 'HH:mm:ss') => format(date, fmat)
+
 export const parse = (text, fmat = 'YYYY-MM-DD HH:mm:ss') => {
   const items = 'YYYY,MM,DD,HH,mm,ss'.split(',')
   let dateText = 'YYYY-MM-DD HH:mm:ss'
@@ -121,6 +124,8 @@ export default {
   $Date,
   now,
   format,
+  formatDate,
+  formatTime,
   parse,
   convertIsoDates
 }
