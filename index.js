@@ -20,7 +20,7 @@ export {
 }
 
 export default {
-  version: '1.0.25',
+  version: '1.0.26',
   dates,
   eventemitter,
   funcs,

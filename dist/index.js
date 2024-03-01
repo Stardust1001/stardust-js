@@ -162,8 +162,16 @@ var StardustJs = (() => {
     });
     return fmat;
   };
-  var formatDate = (date, fmat = "YYYY-MM-DD") => format(date, fmat);
-  var formatTime = (date, fmat = "HH:mm:ss") => format(date, fmat);
+  var formatDate = (date, fmat = "YYYY-MM-DD") => {
+    if (typeof fmat !== "string")
+      fmat = "YYYY-MM-DD";
+    return format(date, fmat);
+  };
+  var formatTime = (date, fmat = "HH:mm:ss") => {
+    if (typeof fmat !== "string")
+      fmat = "HH:mm:ss";
+    return format(date, fmat);
+  };
   var parse = (text, fmat = "YYYY-MM-DD HH:mm:ss") => {
     const items = "YYYY,MM,DD,HH,mm,ss".split(",");
     let dateText = "YYYY-MM-DD HH:mm:ss";
@@ -610,7 +618,7 @@ var StardustJs = (() => {
   // index.js
   var { sleep: sleep2 } = funcs_default;
   var stardust_js_default = {
-    version: "1.0.25",
+    version: "1.0.26",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,

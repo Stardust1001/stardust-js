@@ -98,8 +98,14 @@ export const format = (date, fmat, time = true) => {
   return fmat
 }
 
-export const formatDate = (date, fmat = 'YYYY-MM-DD') => format(date, fmat)
-export const formatTime = (date, fmat = 'HH:mm:ss') => format(date, fmat)
+export const formatDate = (date, fmat = 'YYYY-MM-DD') => {
+  if (typeof fmat !== 'string') fmat = 'YYYY-MM-DD'
+  return format(date, fmat)
+}
+export const formatTime = (date, fmat = 'HH:mm:ss') => {
+  if (typeof fmat !== 'string') fmat = 'HH:mm:ss'
+  return format(date, fmat)
+}
 
 export const parse = (text, fmat = 'YYYY-MM-DD HH:mm:ss') => {
   const items = 'YYYY,MM,DD,HH,mm,ss'.split(',')
