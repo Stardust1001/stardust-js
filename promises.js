@@ -1,3 +1,12 @@
+export const deconcurrent = fetcher => {
+  let promise = null
+  const func = async (...props) => {
+    const data = await fetcher(...props)
+    promise = null
+    return data
+  }
+  return () => promise ||= func()
+}
 
 export const schedule = async (psGen, total = 0, limit = 20) => {
   if (!total) return []
@@ -44,5 +53,6 @@ export const schedule = async (psGen, total = 0, limit = 20) => {
 }
 
 export default {
+  deconcurrent,
   schedule
 }

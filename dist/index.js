@@ -457,6 +457,15 @@ var StardustJs = (() => {
   };
 
   // promises.js
+  var deconcurrent = (fetcher) => {
+    let promise = null;
+    const func = (...props) => __async(void 0, null, function* () {
+      const data = yield fetcher(...props);
+      promise = null;
+      return data;
+    });
+    return () => promise || (promise = func());
+  };
   var schedule = (psGen, total = 0, limit = 20) => __async(void 0, null, function* () {
     if (!total)
       return [];
@@ -500,6 +509,7 @@ var StardustJs = (() => {
     });
   });
   var promises_default = {
+    deconcurrent,
     schedule
   };
 
@@ -618,7 +628,7 @@ var StardustJs = (() => {
   // index.js
   var { sleep: sleep2 } = funcs_default;
   var stardust_js_default = {
-    version: "1.0.26",
+    version: "1.0.27",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
