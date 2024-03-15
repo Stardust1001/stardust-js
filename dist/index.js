@@ -464,7 +464,7 @@ var StardustJs = (() => {
       promise = null;
       return data;
     });
-    return () => promise || (promise = func());
+    return (...props) => promise || (promise = func(...props));
   };
   var schedule = (psGen, total = 0, limit = 20) => __async(void 0, null, function* () {
     if (!total)
@@ -628,7 +628,7 @@ var StardustJs = (() => {
   // index.js
   var { sleep: sleep2 } = funcs_default;
   var stardust_js_default = {
-    version: "1.0.27",
+    version: "1.0.28",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,

@@ -5,7 +5,7 @@ export const deconcurrent = fetcher => {
     promise = null
     return data
   }
-  return () => promise ||= func()
+  return (...props) => promise ||= func(...props)
 }
 
 export const schedule = async (psGen, total = 0, limit = 20) => {
