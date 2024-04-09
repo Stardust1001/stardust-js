@@ -18,7 +18,7 @@ export class $Date extends Date {
     }
     let [year, month, day, hour, minute, second, millisecond] = format(this, 'YYYY:MM:DD:HH:mm:ss:SSS').split(':').map(Number)
     switch (unit) {
-      case 'year': { year ++; break }
+      case 'year': { year += number; break }
       case 'month': { month += number; break }
     }
     return new $Date(year, month - 1, day, hour, minute, second, millisecond)

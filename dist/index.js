@@ -88,7 +88,7 @@ var StardustJs = (() => {
       let [year, month, day, hour, minute, second, millisecond] = format(this, "YYYY:MM:DD:HH:mm:ss:SSS").split(":").map(Number);
       switch (unit) {
         case "year": {
-          year++;
+          year += number;
           break;
         }
         case "month": {
@@ -628,7 +628,7 @@ var StardustJs = (() => {
   // index.js
   var { sleep: sleep2 } = funcs_default;
   var stardust_js_default = {
-    version: "1.0.29",
+    version: "1.0.30",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
