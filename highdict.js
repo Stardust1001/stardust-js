@@ -15,7 +15,7 @@ export const get = (dict, key, defaults) => {
   let branch = dict
   for (let i = 0, len = path.length; i < len; i++) {
     const leaf = path[i]
-    if (branch[leaf]) {
+    if (branch.hasOwnProperty(leaf)) {
       branch = branch[leaf]
     } else {
       return defaults

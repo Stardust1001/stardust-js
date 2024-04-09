@@ -406,7 +406,7 @@ var StardustJs = (() => {
     let branch = dict;
     for (let i = 0, len = path.length; i < len; i++) {
       const leaf = path[i];
-      if (branch[leaf]) {
+      if (branch.hasOwnProperty(leaf)) {
         branch = branch[leaf];
       } else {
         return defaults;
@@ -628,7 +628,7 @@ var StardustJs = (() => {
   // index.js
   var { sleep: sleep2 } = funcs_default;
   var stardust_js_default = {
-    version: "1.0.28",
+    version: "1.0.29",
     dates: dates_default,
     eventemitter: eventemitter_default,
     funcs: funcs_default,
